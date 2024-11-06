@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -21,6 +21,7 @@ public class Payment {
 
     private LocalDateTime dueDate;
 
+    @Enumerated(EnumType.STRING)
     private STATUS status;
 
     private double amount;

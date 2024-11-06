@@ -11,7 +11,7 @@ import lombok.Setter;
 public class UserContract {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "contract_id", nullable = false)

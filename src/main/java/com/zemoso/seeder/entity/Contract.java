@@ -11,10 +11,11 @@ import lombok.Setter;
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private STATUS status;
 
     private String type="MONTHLY";
@@ -26,6 +27,6 @@ public class Contract {
     private int termLength;
 
     private enum STATUS{
-        AVAILABLE, UNAVAILABLE
+        AVAILABLE, UNAVAILABLE;
     }
 }

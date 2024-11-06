@@ -14,7 +14,7 @@ import java.util.Set;
 public class Cashkick {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -25,6 +25,7 @@ public class Cashkick {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private STATUS status;
 
     private double totalFinanced;
