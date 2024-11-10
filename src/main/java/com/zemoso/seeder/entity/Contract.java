@@ -26,7 +26,7 @@ public class Contract {
 
     private int termLength;
 
-    private enum STATUS{
+    public enum STATUS{
         AVAILABLE, UNAVAILABLE;
     }
 }

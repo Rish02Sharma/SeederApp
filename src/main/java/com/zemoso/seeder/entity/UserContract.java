@@ -21,5 +21,9 @@ public class UserContract {
     @JoinColumn(name = "cashkick_id", nullable = false)
     private Cashkick cashkick;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private double paybackAmount;
 }

@@ -1,22 +1,35 @@
 package com.zemoso.seeder.controller;
 
-import com.zemoso.seeder.entity.Users;
-import com.zemoso.seeder.repository.UserRepository;
+import com.zemoso.seeder.dto.UserDto;
+import com.zemoso.seeder.entity.User;
+import com.zemoso.seeder.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @GetMapping("/user/{id}")
-    Users one(@PathVariable Long id) throws Exception {
+    @GetMapping("/{id}")
+    ResponseEntity<User> one(@PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(userService.getById(id), HttpStatus.OK);
+    }
 
-        return userRepository.findById(id)
-                .orElseThrow(() -> new Exception("Something"));
+    @PostMapping
+    public ResponseEntity<User> addUser(@RequestBody UserDto userRequest){
+        User user = userService.createUser(userRequest);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestBody User updateRequest) throws Exception {
+        User user = userService.getById(updateRequest.getId());
+        User userResponse = userService.updateUser(user, updateRequest);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 }

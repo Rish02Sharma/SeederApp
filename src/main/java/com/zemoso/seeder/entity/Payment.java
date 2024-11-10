@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "payment")
@@ -17,9 +17,9 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users users;
+    private User user;
 
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @Enumerated(EnumType.STRING)
     private STATUS status;
@@ -28,7 +28,7 @@ public class Payment {
 
     private double outstanding;
 
-    private enum STATUS{
+    public enum STATUS{
         UPCOMING, PAID, MISSED
     }
 }

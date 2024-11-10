@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "cashkick")
@@ -18,10 +18,10 @@ public class Cashkick {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users users;
+    private User user;
 
     @OneToMany(mappedBy = "cashkick", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserContract> userContracts;
+    private List<Contract> contracts;
 
     private String name;
 
@@ -32,9 +32,11 @@ public class Cashkick {
 
     private double totalOutstanding;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
-    private enum STATUS{
+    private LocalDate startDate;
+
+    public enum STATUS{
         PENDING, APPROVED, REJECTED
     }
 }
