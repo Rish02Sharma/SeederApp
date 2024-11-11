@@ -28,6 +28,8 @@ public class Payment {
 
     private double outstanding;
 
+    private LocalDate maturityDate;
+
     public enum STATUS{
         UPCOMING, PAID, MISSED
     }

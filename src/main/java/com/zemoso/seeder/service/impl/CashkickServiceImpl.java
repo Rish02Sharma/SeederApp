@@ -57,7 +57,6 @@ public class CashkickServiceImpl implements CashkickService {
             paymentService.createInstallmentForCashkick(value);
         });
 
-
     }
 
     private Cashkick addCashkick(CashkickRequestDto cashkickRequestDto, List<Contract> contractList){

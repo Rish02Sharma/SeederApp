@@ -9,4 +9,6 @@ public interface PaymentService {
     void createInstallmentForCashkick(Cashkick cashkick);
 
     List<Payment> getUpcomingPaymentsForUser(long userId);
+
+    void completePayment(Long paymentId);
 }
