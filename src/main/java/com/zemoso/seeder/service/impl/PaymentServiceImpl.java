@@ -1,5 +1,6 @@
 package com.zemoso.seeder.service.impl;
 
+import com.zemoso.seeder.dto.UpcomingPaymentDto;
 import com.zemoso.seeder.entity.Cashkick;
 import com.zemoso.seeder.entity.Payment;
 import com.zemoso.seeder.repository.PaymentRepository;
@@ -33,8 +34,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payment> getUpcomingPaymentsForUser(long userId) {
-        List<Payment> payments = paymentRepository.findByUserIdAndStatusOrderByDueDateDesc(userId, Payment.STATUS.UPCOMING.toString());
+    public List<UpcomingPaymentDto> getUpcomingPaymentsForUser(long userId) {
+        List<Payment> payments = paymentRepository.findByUserIdAndStatusOrderByDueDateDesc(userId, Payment.STATUS.UPCOMING);
         return generateUpcomingPayments(payments);
     }
 
@@ -48,18 +49,23 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    private List<Payment> generateUpcomingPayments(List<Payment> payments) {
-        List<Payment> response = new ArrayList<>();
+    private List<UpcomingPaymentDto> generateUpcomingPayments(List<Payment> payments) {
+        List<UpcomingPaymentDto> response = new ArrayList<>();
 
         payments.forEach(p -> {
+            UpcomingPaymentDto firstPayment = modelMapper.map(payments.getFirst(), UpcomingPaymentDto.class);
+            response.add(firstPayment);
+
             LocalDate maturityDate = p.getMaturityDate();
             double outstanding = p.getOutstanding();
+            LocalDate dueDate = p.getDueDate();
             for (int i = 0; i < 5; i++) {
-                LocalDate date = p.getDueDate().plusMonths(i);
+                dueDate = dueDate.plusMonths(1);
 
-                if (!date.isAfter(maturityDate) && outstanding>0d) {
-                    Payment newPayment = modelMapper.map(p, Payment.class);
-                    newPayment.setDueDate(date);
+                if (!dueDate.isAfter(maturityDate) && outstanding>0d) {
+                    UpcomingPaymentDto newPayment = modelMapper.map(p, UpcomingPaymentDto.class);
+
+                    newPayment.setDueDate(dueDate);
                     outstanding = outstanding-newPayment.getAmount();
                     newPayment.setOutstanding(outstanding);
                     response.add(newPayment);

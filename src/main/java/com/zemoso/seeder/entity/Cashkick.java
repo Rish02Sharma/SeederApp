@@ -20,7 +20,7 @@ public class Cashkick {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "cashkick", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ElementCollection
     private List<Contract> contracts;
 
     private String name;
@@ -29,6 +29,8 @@ public class Cashkick {
     private STATUS status;
 
     private double totalFinanced;
+
+    private double totalRecieved;
 
     private double totalOutstanding;
 

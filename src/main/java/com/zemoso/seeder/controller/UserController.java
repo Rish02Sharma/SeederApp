@@ -32,4 +32,6 @@ public class UserController {
         User userResponse = userService.updateUser(user, updateRequest);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
+
+
 }

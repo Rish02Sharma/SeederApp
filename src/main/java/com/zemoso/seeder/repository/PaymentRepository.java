@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    List<Payment> findByUserIdAndStatusOrderByDueDateDesc(Long userId, String status);
+    List<Payment> findByUserIdAndStatusOrderByDueDateDesc(Long userId, Payment.STATUS status);
 }

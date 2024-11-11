@@ -25,5 +25,7 @@ public class UserContract {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private Double paymentAmount;
+
     private double paybackAmount;
 }

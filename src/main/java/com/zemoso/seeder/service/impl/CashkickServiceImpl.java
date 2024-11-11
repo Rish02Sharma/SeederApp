@@ -14,7 +14,6 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +32,12 @@ public class CashkickServiceImpl implements CashkickService {
     @Override
     public void createNewCashkick(CashkickRequestDto cashkickRequestDto) {
         try {
-            User user = userService.getById(cashkickRequestDto.getUserID());
+            User user = userService.getById(cashkickRequestDto.getUserId());
             List<Contract> contractList = contractService.getAllByIds(cashkickRequestDto.getContractIds());
-            Cashkick cashkick = addCashkick(cashkickRequestDto, contractList);
+            Cashkick cashkick = addCashkick(cashkickRequestDto, contractList, user);
             addUserContracts(contractList, cashkick);
         }catch (Exception e){
-
+            log.info("Exception " + e.getMessage());
         }
     }
 
@@ -59,12 +58,26 @@ public class CashkickServiceImpl implements CashkickService {
 
     }
 
-    private Cashkick addCashkick(CashkickRequestDto cashkickRequestDto, List<Contract> contractList){
+    private Cashkick addCashkick(CashkickRequestDto cashkickRequestDto, List<Contract> contractList, User user){
         Cashkick cashkick = modelMapper.map(cashkickRequestDto, Cashkick.class);
-        cashkick.setStartDate(LocalDate.now());
+
+        double totalRecieved = contractList.stream()
+                .mapToDouble(Contract::getTotalAvailable)
+                .sum();
+
+        double totalFinanced = totalRecieved + totalRecieved*0.12;
+        cashkick.setUser(user);
+        cashkick.setStartDate(LocalDate.now().plusDays(1));
         cashkick.setEndDate(LocalDate.now().plusMonths(12));
         cashkick.setStatus(Cashkick.STATUS.PENDING);
         cashkick.setContracts(contractList);
+        cashkick.setTotalFinanced(totalFinanced);
+        cashkick.setTotalRecieved(totalRecieved);
+        cashkick.setTotalOutstanding(totalFinanced);
+
+        user.setAvailableCredit(user.getAvailableCredit()-cashkick.getTotalFinanced());
+        userService.updateUser(user, user);
+
         return cashkickRepository.save(cashkick);
     }
 

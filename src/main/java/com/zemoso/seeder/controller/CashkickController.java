@@ -28,7 +28,7 @@ public class CashkickController {
         return new ResponseEntity<>(cashkickService.getUsersCashkick(userId), HttpStatus.OK);
     }
 
-    @PostMapping("/{cashkickId}")
+    @PostMapping("/approve/{cashkickId}")
     ResponseEntity<String> approveCashkick(@PathVariable Long cashkickId){
         cashkickService.approveCashkick(cashkickId);
         return new ResponseEntity<>("OK", HttpStatus.CREATED);

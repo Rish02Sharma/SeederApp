@@ -1,9 +1,6 @@
 package com.zemoso.seeder.controller;
 
-import com.zemoso.seeder.dto.PaymentCompleteDto;
-import com.zemoso.seeder.dto.UserDto;
-import com.zemoso.seeder.entity.Payment;
-import com.zemoso.seeder.entity.User;
+import com.zemoso.seeder.dto.UpcomingPaymentDto;
 import com.zemoso.seeder.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +17,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping("/upcoming/{userId}")
-    ResponseEntity<List<Payment>> getUpcomingPaymentsForUser(@PathVariable Long userId) throws Exception {
+    ResponseEntity<List<UpcomingPaymentDto>> getUpcomingPaymentsForUser(@PathVariable Long userId) throws Exception {
         return new ResponseEntity<>(paymentService.getUpcomingPaymentsForUser(userId), HttpStatus.OK);
     }
 
@@ -31,6 +28,3 @@ public class PaymentController {
     }
 
 }
-
-
-/* can there be two cashkicks going on at the same time? */

@@ -9,8 +9,6 @@ import java.util.List;
 @Setter
 public class CashkickRequestDto {
     private String name;
-    private Long userID;
-    private Double totalFinanced;
-    private Double totalOutstanding;
+    private Long userId;
     private List<Long> contractIds;
 }
