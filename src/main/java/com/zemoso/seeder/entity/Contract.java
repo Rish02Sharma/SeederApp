@@ -24,6 +24,8 @@ public class Contract {
 
     private double rate;
 
+    private double perPayment;
+
     private int termLength;
 
     public enum STATUS{

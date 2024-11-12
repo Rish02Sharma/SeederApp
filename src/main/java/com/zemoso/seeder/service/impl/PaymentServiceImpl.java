@@ -3,6 +3,7 @@ package com.zemoso.seeder.service.impl;
 import com.zemoso.seeder.dto.UpcomingPaymentDto;
 import com.zemoso.seeder.entity.Cashkick;
 import com.zemoso.seeder.entity.Payment;
+import com.zemoso.seeder.exception.ResourceNotFoundException;
 import com.zemoso.seeder.repository.PaymentRepository;
 import com.zemoso.seeder.service.PaymentService;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public List<UpcomingPaymentDto> getUpcomingPaymentsForUser(long userId) {
         List<Payment> payments = paymentRepository.findByUserIdAndStatusOrderByDueDateDesc(userId, Payment.STATUS.UPCOMING);
+        if(payments.isEmpty()){
+            throw new ResourceNotFoundException("Not installments found for user " + userId);
+        }
         return generateUpcomingPayments(payments);
     }
 

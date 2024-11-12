@@ -9,5 +9,4 @@ import java.util.List;
 public interface ContractService {
     List<ContractResponse> findAllContracts(long userId);
     Contract createNewContract(ContractDto contractDto);
-    List<Contract> getAllByIds(List<Long> contractIds);
 }

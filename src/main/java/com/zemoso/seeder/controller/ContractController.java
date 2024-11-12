@@ -19,7 +19,7 @@ public class ContractController {
     private final ContractService contractService;
 
     @GetMapping("/available/{userId}")
-    ResponseEntity<List<ContractResponse>> getAllAvailableContracts(@PathVariable Long userId) throws Exception {
+    ResponseEntity<List<ContractResponse>> getAllAvailableContracts(@PathVariable Long userId){
         return new ResponseEntity<>(contractService.findAllContracts(userId), HttpStatus.OK);
     }
 

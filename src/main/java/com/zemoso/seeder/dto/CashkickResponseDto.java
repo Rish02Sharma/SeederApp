@@ -1,7 +1,6 @@
 package com.zemoso.seeder.dto;
 
 import com.zemoso.seeder.entity.Cashkick;
-import com.zemoso.seeder.entity.Contract;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +15,5 @@ public class CashkickResponseDto {
     private Cashkick.STATUS status;
     private LocalDate endDate;
     private double totalFinanced;
-    private List<Contract> contracts;
+    private List<CashkickContractDto> contracts;
 }

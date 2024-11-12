@@ -2,6 +2,7 @@ package com.zemoso.seeder.service.impl;
 
 import com.zemoso.seeder.dto.UserDto;
 import com.zemoso.seeder.entity.User;
+import com.zemoso.seeder.exception.ResourceNotFoundException;
 import com.zemoso.seeder.repository.UserRepository;
 import com.zemoso.seeder.service.UserService;
 import lombok.AllArgsConstructor;
@@ -18,9 +19,9 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public User getById(Long id) throws Exception {
+    public User getById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new Exception("User not found"));
+        return user.orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
     }
 
     @Override

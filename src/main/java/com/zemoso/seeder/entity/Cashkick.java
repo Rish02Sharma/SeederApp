@@ -20,8 +20,8 @@ public class Cashkick {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ElementCollection
-    private List<Contract> contracts;
+    @OneToMany(mappedBy = "cashkick", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserContract> userContracts;
 
     private String name;
 

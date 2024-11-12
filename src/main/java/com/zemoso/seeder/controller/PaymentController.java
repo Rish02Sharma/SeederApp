@@ -17,7 +17,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping("/upcoming/{userId}")
-    ResponseEntity<List<UpcomingPaymentDto>> getUpcomingPaymentsForUser(@PathVariable Long userId) throws Exception {
+    ResponseEntity<List<UpcomingPaymentDto>> getUpcomingPaymentsForUser(@PathVariable Long userId){
         return new ResponseEntity<>(paymentService.getUpcomingPaymentsForUser(userId), HttpStatus.OK);
     }
 
