@@ -31,6 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setAmount(cashkick.getTotalFinanced()/12);
         payment.setOutstanding(cashkick.getTotalOutstanding()-payment.getAmount());
         payment.setMaturityDate(cashkick.getEndDate());
+        payment.setCashkick_id(cashkick.getId());
         paymentRepository.save(payment);
     }
 
@@ -38,18 +39,21 @@ public class PaymentServiceImpl implements PaymentService {
     public List<UpcomingPaymentDto> getUpcomingPaymentsForUser(long userId) {
         List<Payment> payments = paymentRepository.findByUserIdAndStatusOrderByDueDateDesc(userId, Payment.STATUS.UPCOMING);
         if(payments.isEmpty()){
-            throw new ResourceNotFoundException("Not installments found for user " + userId);
+            throw new ResourceNotFoundException("No installments found for user " + userId);
         }
         return generateUpcomingPayments(payments);
     }
 
     @Override
-    public void completePayment(Long paymentId) {
+    public Payment completePayment(Long paymentId) {
         Optional<Payment> payment = paymentRepository.findById(paymentId);
         if(payment.isPresent()){
             payment.get().setStatus(Payment.STATUS.PAID);
             paymentRepository.save(payment.get());
             createNextInstallmentForPayment(payment.get());
+            return payment.get();
+        }else{
+            throw new ResourceNotFoundException("Payment not found for paymentId " + paymentId);
         }
     }
 
@@ -57,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
         List<UpcomingPaymentDto> response = new ArrayList<>();
 
         payments.forEach(p -> {
-            UpcomingPaymentDto firstPayment = modelMapper.map(payments.getFirst(), UpcomingPaymentDto.class);
+            UpcomingPaymentDto firstPayment = modelMapper.map(p, UpcomingPaymentDto.class);
             response.add(firstPayment);
 
             LocalDate maturityDate = p.getMaturityDate();
@@ -68,7 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
 
                 if (!dueDate.isAfter(maturityDate) && outstanding>0d) {
                     UpcomingPaymentDto newPayment = modelMapper.map(p, UpcomingPaymentDto.class);
-
+                    newPayment.setId(null);
                     newPayment.setDueDate(dueDate);
                     outstanding = outstanding-newPayment.getAmount();
                     newPayment.setOutstanding(outstanding);
@@ -80,8 +84,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void createNextInstallmentForPayment(Payment payment){
-        Payment nextPayment = modelMapper.map(payment, Payment.class);
+        Payment nextPayment = new Payment();
         if (!payment.getDueDate().isAfter(payment.getMaturityDate())) {
+            nextPayment.setAmount(payment.getAmount());
+            nextPayment.setUser(payment.getUser());
+            nextPayment.setMaturityDate(payment.getMaturityDate());
             nextPayment.setDueDate(payment.getDueDate().plusMonths(1));
             nextPayment.setOutstanding(payment.getOutstanding()- payment.getAmount());
             nextPayment.setStatus(Payment.STATUS.UPCOMING);

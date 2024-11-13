@@ -9,7 +9,6 @@ import com.zemoso.seeder.service.ContractService;
 import com.zemoso.seeder.service.UserService;
 import com.zemoso.seeder.util.NumberUtils;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class ContractServiceImpl implements ContractService {
 
     private final UserService userService;

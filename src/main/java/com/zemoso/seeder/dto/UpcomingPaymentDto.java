@@ -9,9 +9,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class UpcomingPaymentDto {
+    private Long id;
     private LocalDate dueDate;
     private Payment.STATUS status;
     private double amount;
     private double outstanding;
     private LocalDate maturityDate;
+    private Long cashkick_id;
 }

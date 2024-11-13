@@ -31,7 +31,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User oldUser, User newUser) {
+    public User updateUser(User newUser) {
+        User oldUser = getById(newUser.getId());
         oldUser.setName(newUser.getName()!=null?newUser.getName(): oldUser.getName());
         oldUser.setEmail(newUser.getEmail()!=null?newUser.getEmail(): oldUser.getEmail());
         oldUser.setPassword(newUser.getPassword()!=null?newUser.getPassword(): oldUser.getPassword());

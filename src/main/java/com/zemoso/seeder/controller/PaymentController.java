@@ -1,6 +1,7 @@
 package com.zemoso.seeder.controller;
 
 import com.zemoso.seeder.dto.UpcomingPaymentDto;
+import com.zemoso.seeder.entity.Payment;
 import com.zemoso.seeder.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,9 @@ public class PaymentController {
     }
 
     @PostMapping("/complete/{paymentId}")
-    public ResponseEntity<String> completePayment(@PathVariable Long paymentId){
-        paymentService.completePayment(paymentId);
-        return new ResponseEntity<>("OK", HttpStatus.CREATED);
+    public ResponseEntity<Payment> completePayment(@PathVariable Long paymentId){
+        Payment response = paymentService.completePayment(paymentId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }

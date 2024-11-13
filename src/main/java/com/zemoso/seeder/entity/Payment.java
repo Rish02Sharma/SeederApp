@@ -12,12 +12,14 @@ import java.time.LocalDate;
 @Setter
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    private Long cashkick_id;
 
     private LocalDate dueDate;
 

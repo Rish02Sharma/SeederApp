@@ -16,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    ResponseEntity<User> one(@PathVariable Long id) throws Exception {
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getById(id), HttpStatus.OK);
     }
 
@@ -27,9 +27,8 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User updateRequest) throws Exception {
-        User user = userService.getById(updateRequest.getId());
-        User userResponse = userService.updateUser(user, updateRequest);
+    public ResponseEntity<User> updateUser(@RequestBody User updateRequest) {
+        User userResponse = userService.updateUser(updateRequest);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 

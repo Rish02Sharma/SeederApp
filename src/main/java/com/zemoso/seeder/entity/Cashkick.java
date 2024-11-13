@@ -1,7 +1,9 @@
 package com.zemoso.seeder.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -11,9 +13,11 @@ import java.util.List;
 @Table(name = "cashkick")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cashkick {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package com.zemoso.seeder.service.impl;
 
+import com.zemoso.seeder.dto.ApproveCashkickResponse;
 import com.zemoso.seeder.dto.CashkickContractDto;
 import com.zemoso.seeder.dto.CashkickRequestDto;
 import com.zemoso.seeder.dto.CashkickResponseDto;
@@ -11,18 +12,15 @@ import com.zemoso.seeder.repository.CashkickRepository;
 import com.zemoso.seeder.service.*;
 import com.zemoso.seeder.util.NumberUtils;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class CashkickServiceImpl implements CashkickService {
 
     private final ModelMapper modelMapper;
@@ -32,13 +30,18 @@ public class CashkickServiceImpl implements CashkickService {
     private final PaymentService paymentService;
 
     @Override
-    public Cashkick createNewCashkick(CashkickRequestDto cashkickRequestDto){
+    public CashkickResponseDto createNewCashkick(CashkickRequestDto cashkickRequestDto){
+        if(cashkickRequestDto.getContractData().isEmpty()){
+            throw new IllegalArgumentException("Contract data cant be empty while creating a cashkick");
+        }
 
         User user = userService.getById(cashkickRequestDto.getUserId());
         List<CashkickContractDto> contractList = cashkickRequestDto.getContractData();
         Cashkick cashkick = addCashkick(cashkickRequestDto, contractList, user);
+        CashkickResponseDto responseDto = modelMapper.map(cashkick, CashkickResponseDto.class);
+        responseDto.setContracts(contractList);
         addUserContracts(contractList, cashkick);
-        return cashkick;
+        return responseDto;
     }
 
     @Override
@@ -48,14 +51,12 @@ public class CashkickServiceImpl implements CashkickService {
     }
 
     @Override
-    public Cashkick approveCashkick(long cashkickId) {
+    public ApproveCashkickResponse approveCashkick(long cashkickId) {
         Cashkick cashkick = cashkickRepository.findById(cashkickId).orElseThrow(() -> new ResourceNotFoundException("Cashkick not found for Id: " + cashkickId));
-
         cashkick.setStatus(Cashkick.STATUS.APPROVED);
-        Cashkick response = cashkickRepository.save(cashkick);
-        paymentService.createInstallmentForCashkick(cashkick);
-        return response;
-
+        Cashkick updatedCashkick = cashkickRepository.save(cashkick);
+        paymentService.createInstallmentForCashkick(updatedCashkick);
+        return modelMapper.map(updatedCashkick, ApproveCashkickResponse.class);
     }
 
     List<CashkickResponseDto> convertToCashkickResponse(List<Cashkick> cashkicks){
@@ -71,7 +72,6 @@ public class CashkickServiceImpl implements CashkickService {
 
     private Cashkick addCashkick(CashkickRequestDto cashkickRequestDto, List<CashkickContractDto> contractList, User user){
         Cashkick cashkick = modelMapper.map(cashkickRequestDto, Cashkick.class);
-
         double totalRecieved = NumberUtils.roundToTwoDecimalPlaces(contractList.stream()
                 .mapToDouble(CashkickContractDto::getPaymentAvailed)
                 .sum());
@@ -84,17 +84,13 @@ public class CashkickServiceImpl implements CashkickService {
         cashkick.setTotalFinanced(totalFinanced);
         cashkick.setTotalRecieved(totalRecieved);
         cashkick.setTotalOutstanding(totalFinanced);
-
         user.setAvailableCredit(user.getAvailableCredit()-cashkick.getTotalFinanced());
-        userService.updateUser(user, user);
-
+        userService.updateUser(user);
         return cashkickRepository.save(cashkick);
     }
 
     private void addUserContracts(List<CashkickContractDto> contracts, Cashkick cashkick){
-        contracts.forEach(contract -> {
-            userContractService.addUserContract(contract, cashkick.getUser(), cashkick);
-        });
+        contracts.forEach(contract -> userContractService.addUserContract(contract, cashkick.getUser(), cashkick));
     }
 
     private List<CashkickContractDto> getContractsFromUserContract(List<UserContract> userContracts){

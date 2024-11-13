@@ -1,8 +1,8 @@
 package com.zemoso.seeder.controller;
 
+import com.zemoso.seeder.dto.ApproveCashkickResponse;
 import com.zemoso.seeder.dto.CashkickRequestDto;
 import com.zemoso.seeder.dto.CashkickResponseDto;
-import com.zemoso.seeder.entity.Cashkick;
 import com.zemoso.seeder.service.CashkickService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +20,8 @@ public class CashkickController {
     private final CashkickService cashkickService;
 
     @PostMapping
-    ResponseEntity<Cashkick> createNewCashkick(@RequestBody CashkickRequestDto cashkickRequestDto){
-        if(cashkickRequestDto.getContractData().isEmpty()){
-            throw new IllegalArgumentException("Contract data cant be empty while creating a cashkick");
-        }
-
-        Cashkick cashkick = cashkickService.createNewCashkick(cashkickRequestDto);
+    ResponseEntity<CashkickResponseDto> createNewCashkick(@RequestBody CashkickRequestDto cashkickRequestDto){
+        CashkickResponseDto cashkick = cashkickService.createNewCashkick(cashkickRequestDto);
         return new ResponseEntity<>(cashkick, HttpStatus.CREATED);
     }
 
@@ -35,8 +31,8 @@ public class CashkickController {
     }
 
     @PostMapping("/approve/{cashkickId}")
-    ResponseEntity<Cashkick> approveCashkick(@PathVariable Long cashkickId){
-        Cashkick response = cashkickService.approveCashkick(cashkickId);
+    ResponseEntity<ApproveCashkickResponse> approveCashkick(@PathVariable Long cashkickId){
+        ApproveCashkickResponse response = cashkickService.approveCashkick(cashkickId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
