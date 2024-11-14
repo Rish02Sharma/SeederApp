@@ -63,7 +63,7 @@ public class CashkickServiceImpl implements CashkickService {
         List<CashkickResponseDto> response = new ArrayList<>();
         cashkicks.forEach(cashkick -> {
             CashkickResponseDto r = modelMapper.map(cashkick, CashkickResponseDto.class);
-            List<UserContract> userContracts = cashkick.getUserContracts();
+            List<UserContract> userContracts = userContractService.findAllByCashkickId(cashkick.getId());
             r.setContracts(getContractsFromUserContract(userContracts));
             response.add(r);
         });

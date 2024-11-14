@@ -42,7 +42,6 @@ class PaymentServiceImplTest {
         cashkick = new Cashkick(
                 1L,
                 user,
-                Arrays.asList(),
                 "Cashkick 1",
                 Cashkick.STATUS.PENDING,
                 1200d,
@@ -60,7 +59,7 @@ class PaymentServiceImplTest {
         payment.setDueDate(LocalDate.now().plusMonths(1));
         payment.setMaturityDate(cashkick.getEndDate());
         payment.setStatus(Payment.STATUS.UPCOMING);
-        payment.setCashkick_id(cashkick.getId());
+        payment.setCashkickId(cashkick.getId());
     }
 
     @Test
@@ -74,7 +73,7 @@ class PaymentServiceImplTest {
         assertEquals(cashkick.getTotalFinanced() / 12, payment.getAmount());
         assertEquals(cashkick.getTotalOutstanding() - payment.getAmount(), payment.getOutstanding());
         assertEquals(cashkick.getEndDate(), payment.getMaturityDate());
-        assertEquals(cashkick.getId(), payment.getCashkick_id());
+        assertEquals(cashkick.getId(), payment.getCashkickId());
     }
 
     @Test
@@ -90,20 +89,6 @@ class PaymentServiceImplTest {
         assertNotNull(result);
         assertEquals(6, result.size());
         assertSame(upcomingPaymentDto, result.getFirst());
-
-        verify(paymentRepository, times(1)).findByUserIdAndStatusOrderByDueDateDesc(user.getId(), Payment.STATUS.UPCOMING);
-    }
-
-    @Test
-    void testGetUpcomingPaymentsForUser_NoPayments() {
-        when(paymentRepository.findByUserIdAndStatusOrderByDueDateDesc(user.getId(), Payment.STATUS.UPCOMING))
-                .thenReturn(Collections.emptyList());
-
-        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
-            paymentService.getUpcomingPaymentsForUser(user.getId());
-        });
-
-        assertEquals("No installments found for user " + user.getId(), exception.getMessage());
 
         verify(paymentRepository, times(1)).findByUserIdAndStatusOrderByDueDateDesc(user.getId(), Payment.STATUS.UPCOMING);
     }

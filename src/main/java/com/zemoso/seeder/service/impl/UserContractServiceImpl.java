@@ -25,7 +25,7 @@ public class UserContractServiceImpl implements UserContractService {
         UserContract userContract = new UserContract();
         Contract c = modelMapper.map(contractRequest, Contract.class);
         userContract.setContract(c);
-        userContract.setCashkick(cashkick);
+        userContract.setCashkickId(cashkick.getId());
         userContract.setUser(user);
         userContract.setPaymentAvailed(NumberUtils.roundToTwoDecimalPlaces(contractRequest.getPaymentAvailed()));
         userContractRepository.save(userContract);

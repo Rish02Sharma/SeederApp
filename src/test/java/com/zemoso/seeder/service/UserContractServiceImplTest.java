@@ -45,7 +45,6 @@ class UserContractServiceImplTest {
         cashkick = new Cashkick(
                 1L,
                 user,
-                List.of(),
                 "Cashkick 1",
                 Cashkick.STATUS.PENDING,
                 1000d,
@@ -73,15 +72,6 @@ class UserContractServiceImplTest {
         contractRequest.setPerPayment(100d);
         contractRequest.setRate(5d);
         contractRequest.setTermLength(12);
-
-        userContract = new UserContract();
-        userContract.setId(1L);
-        userContract.setUser(user);
-        userContract.setCashkick(cashkick);
-        userContract.setContract(contract);
-        userContract.setPaymentAvailed(500d);
-
-        cashkick.setUserContracts(List.of(userContract));
     }
 
     @Test

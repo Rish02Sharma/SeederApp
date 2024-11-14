@@ -3,9 +3,6 @@ package com.zemoso.seeder.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zemoso.seeder.dto.*;
 import com.zemoso.seeder.entity.Cashkick;
-import com.zemoso.seeder.entity.Contract;
-import com.zemoso.seeder.entity.User;
-import com.zemoso.seeder.entity.UserContract;
 import com.zemoso.seeder.service.CashkickService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CashkickControllerTest {
+class CashkickControllerTest {
     @Autowired
     private MockMvc mockMvc;
 

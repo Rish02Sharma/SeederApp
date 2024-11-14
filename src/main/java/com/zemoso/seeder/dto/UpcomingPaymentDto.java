@@ -15,5 +15,5 @@ public class UpcomingPaymentDto {
     private double amount;
     private double outstanding;
     private LocalDate maturityDate;
-    private Long cashkick_id;
+    private Long cashkickId;
 }

@@ -31,16 +31,13 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setAmount(cashkick.getTotalFinanced()/12);
         payment.setOutstanding(cashkick.getTotalOutstanding()-payment.getAmount());
         payment.setMaturityDate(cashkick.getEndDate());
-        payment.setCashkick_id(cashkick.getId());
+        payment.setCashkickId(cashkick.getId());
         paymentRepository.save(payment);
     }
 
     @Override
     public List<UpcomingPaymentDto> getUpcomingPaymentsForUser(long userId) {
         List<Payment> payments = paymentRepository.findByUserIdAndStatusOrderByDueDateDesc(userId, Payment.STATUS.UPCOMING);
-        if(payments.isEmpty()){
-            throw new ResourceNotFoundException("No installments found for user " + userId);
-        }
         return generateUpcomingPayments(payments);
     }
 

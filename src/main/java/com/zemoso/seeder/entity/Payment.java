@@ -19,7 +19,7 @@ public class Payment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Long cashkick_id;
+    private Long cashkickId;
 
     private LocalDate dueDate;
 

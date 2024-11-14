@@ -17,9 +17,7 @@ public class UserContract {
     @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
 
-    @ManyToOne
-    @JoinColumn(name = "cashkick_id", nullable = false)
-    private Cashkick cashkick;
+    private Long cashkickId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

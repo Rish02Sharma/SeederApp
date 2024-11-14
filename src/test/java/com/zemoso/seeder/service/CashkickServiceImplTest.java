@@ -84,15 +84,6 @@ class CashkickServiceImplTest {
         contract.setPerPayment(100d);
         contract.setTermLength(12);
 
-        UserContract userContract = new UserContract();
-        userContract.setId(1L);
-        userContract.setUser(user);
-        userContract.setCashkick(cashkick);
-        userContract.setContract(contract);
-        userContract.setPaymentAvailed(500d);
-
-        cashkick.setUserContracts(List.of(userContract));
-
         cashkickResponseDto = new CashkickResponseDto();
         cashkickResponseDto.setId(cashkick.getId());
     }
