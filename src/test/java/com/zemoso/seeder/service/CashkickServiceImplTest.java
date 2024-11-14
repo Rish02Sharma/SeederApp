@@ -7,6 +7,7 @@ import com.zemoso.seeder.dto.CashkickResponseDto;
 import com.zemoso.seeder.entity.Cashkick;
 import com.zemoso.seeder.entity.Contract;
 import com.zemoso.seeder.entity.User;
+import com.zemoso.seeder.entity.UserContract;
 import com.zemoso.seeder.repository.CashkickRepository;
 import com.zemoso.seeder.service.impl.CashkickServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,7 @@ class CashkickServiceImplTest {
     private List<CashkickContractDto> contractData;
     private CashkickResponseDto cashkickResponseDto;
     private Contract contract;
+    private UserContract userContract;
 
     @BeforeEach
     public void setUp() {
@@ -82,6 +84,12 @@ class CashkickServiceImplTest {
         contract.setRate(5d);
         contract.setPerPayment(100d);
         contract.setTermLength(12);
+
+        userContract = new UserContract();
+        userContract.setCashkickId(cashkick.getId());
+        userContract.setContract(contract);
+        userContract.setUser(user);
+        userContract.setId(1L);
 
         cashkickResponseDto = new CashkickResponseDto();
         cashkickResponseDto.setId(cashkick.getId());
@@ -123,6 +131,7 @@ class CashkickServiceImplTest {
 
         when(cashkickRepository.findAllByUserId(anyLong())).thenReturn(cashkicks);
         when(modelMapper.map(any(Cashkick.class), eq(CashkickResponseDto.class))).thenReturn(cashkickResponseDto);
+        when(userContractService.findAllByCashkickId(anyLong())).thenReturn(List.of(userContract));
         CashkickContractDto cashkickContractDto = mock(CashkickContractDto.class);
         when(modelMapper.map(contract, CashkickContractDto.class)).thenReturn(cashkickContractDto);
 
