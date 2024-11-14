@@ -7,7 +7,6 @@ import com.zemoso.seeder.dto.CashkickResponseDto;
 import com.zemoso.seeder.entity.Cashkick;
 import com.zemoso.seeder.entity.Contract;
 import com.zemoso.seeder.entity.User;
-import com.zemoso.seeder.entity.UserContract;
 import com.zemoso.seeder.repository.CashkickRepository;
 import com.zemoso.seeder.service.impl.CashkickServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
